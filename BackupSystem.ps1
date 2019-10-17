@@ -53,6 +53,7 @@ function Backup-Full()
         Backup-FolderTo "D:\Bilder" (Join-Path $BackupPfad "Bilder") $BackupPfad
         Backup-FolderTo "D:\Dokumente" (Join-Path $BackupPfad "Dokumente") $BackupPfad
         Backup-FolderTo "D:\Musik" (Join-Path $BackupPfad "Musik") $BackupPfad
+        Backup-FolderTo "D:\OneDrive" (Join-Path $BackupPfad "OneDrive") $BackupPfad
     } else  {
         Write-Warning "Die externe Platte ist nicht angeschlossen. Abbruch!"
         return
