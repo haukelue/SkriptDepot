@@ -17,6 +17,8 @@ if (Test-Path $pathToTfexe)
         if (Test-Path $fileToUserName)
         {
             $username = "/login:" + (Get-Content $fileToUserName)
+        } else {
+            $username = $null
         }
         & $pathToTfexe get $username
         Pop-Location
