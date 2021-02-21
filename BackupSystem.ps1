@@ -47,6 +47,7 @@ function Backup-Full() {
     if (Test-Path "B:\") {
         $BackupPfad = "B:\Backup"
         Backup-FolderTo "D:\Sonstiges" (Join-Path $BackupPfad "Sonstiges") $BackupPfad
+        Backup-FolderTo "D:\OneDrive" (Join-Path $BackupPfad "OneDrive") $BackupPfad ".849C9593-D756-4E56-8D6E-42412F2A707B"
         Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme") $BackupPfad
         Backup-FolderTo "D:\Gespeicherte Spiele" (Join-Path $BackupPfad "Gespeicherte Spiele") $BackupPfad
         Backup-FolderTo "D:\Downloads" (Join-Path $BackupPfad "Downloads") $BackupPfad
@@ -54,7 +55,7 @@ function Backup-Full() {
         Backup-FolderTo "D:\Bilder" (Join-Path $BackupPfad "Bilder") $BackupPfad
         Backup-FolderTo "D:\Dokumente" (Join-Path $BackupPfad "Dokumente") $BackupPfad
         Backup-FolderTo "D:\Musik" (Join-Path $BackupPfad "Musik") $BackupPfad
-        Backup-FolderTo "D:\OneDrive" (Join-Path $BackupPfad "OneDrive") $BackupPfad ".849C9593-D756-4E56-8D6E-42412F2A707B"
+        Backup-FolderTo "D:\Lesestoff" (Join-Path $BackupPfad "Lesestoff") $BackupPfad
     }
     else {
         Write-Warning "Die externe Platte ist nicht angeschlossen. Abbruch!"
