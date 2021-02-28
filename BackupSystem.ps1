@@ -26,20 +26,20 @@
 }
 
 function Backup-Programmconfigurations() {
-    $profile = "D:\Sonstiges\Profile"
-    Backup-FolderTo (Join-Path $env:APPDATA "TS3Client") (Join-Path $profile "TS3Client")
-    Backup-FolderTo (Join-Path $env:APPDATA "XnViewMP") (Join-Path $profile "XnViewMP")
-    Backup-FolderTo (Join-Path $env:LOCALAPPDATA "Microsoft\SyncToy\2.0") (Join-Path $profile "SyncToy")
-    Backup-FolderTo (Join-Path $env:USERPROFILE ".vscode") (Join-Path $profile ".vscode")
+    $profilePfad = "D:\Sonstiges\Profile"
+    Backup-FolderTo (Join-Path $env:APPDATA "TS3Client") (Join-Path $profilePfad "TS3Client")
+    Backup-FolderTo (Join-Path $env:APPDATA "XnViewMP") (Join-Path $profilePfad "XnViewMP")
+    Backup-FolderTo (Join-Path $env:LOCALAPPDATA "Microsoft\SyncToy\2.0") (Join-Path $profilePfad "SyncToy")
+    Backup-FolderTo (Join-Path $env:USERPROFILE ".vscode") (Join-Path $profilePfad ".vscode")
     Copy-Item (Join-Path $env:APPDATA WinSCP.ini) D:\Sonstiges\Profile\ -Force
 }
 
 function Restore-Programmconfigurations() {
-    $profile = "D:\Sonstiges\Profile"
-    Backup-FolderTo (Join-Path $profile "TS3Client") (Join-Path $env:APPDATA "TS3Client")
-    Backup-FolderTo (Join-Path $profile "XnViewMP") (Join-Path $env:APPDATA "XnViewMP")
-    Backup-FolderTo (Join-Path $profile "SyncToy") (Join-Path $env:LOCALAPPDATA "Microsoft\SyncToy\2.0")
-    Backup-FolderTo (Join-Path $profile ".vscode") (Join-Path $env:USERPROFILE ".vscode")
+    $profilePfad = "D:\Sonstiges\Profile"
+    Backup-FolderTo (Join-Path $profilePfad "TS3Client") (Join-Path $env:APPDATA "TS3Client")
+    Backup-FolderTo (Join-Path $profilePfad "XnViewMP") (Join-Path $env:APPDATA "XnViewMP")
+    Backup-FolderTo (Join-Path $profilePfad "SyncToy") (Join-Path $env:LOCALAPPDATA "Microsoft\SyncToy\2.0")
+    Backup-FolderTo (Join-Path $profilePfad ".vscode") (Join-Path $env:USERPROFILE ".vscode")
     Copy-Item D:\Sonstiges\Profile\WinSCP.ini $env:APPDATA -Force
 }
 
