@@ -25,11 +25,19 @@
     robocopy.exe "${source}" "${destination}" /MIR /NP /TEE /XJ /NDL /R:5 /W:10 @options
 }
 
+function Copy-FolderTo {
+    param (
+        [string]$source,
+        [string]$destination
+    )
+    
+    robocopy.exe "${source}" "${destination}" /NP /TEE /XJ /NDL /R:5 /W:10 /NJH /NJS
+}
+
 function Backup-Programmconfigurations() {
     $profilePfad = "D:\Sonstiges\Profile"
     Backup-FolderTo (Join-Path $env:APPDATA "TS3Client") (Join-Path $profilePfad "TS3Client")
     Backup-FolderTo (Join-Path $env:APPDATA "XnViewMP") (Join-Path $profilePfad "XnViewMP")
-    Backup-FolderTo (Join-Path $env:LOCALAPPDATA "Microsoft\SyncToy\2.0") (Join-Path $profilePfad "SyncToy")
     Backup-FolderTo (Join-Path $env:USERPROFILE ".vscode") (Join-Path $profilePfad ".vscode")
     Copy-Item (Join-Path $env:APPDATA WinSCP.ini) D:\Sonstiges\Profile\ -Force
 }
@@ -38,7 +46,6 @@ function Restore-Programmconfigurations() {
     $profilePfad = "D:\Sonstiges\Profile"
     Backup-FolderTo (Join-Path $profilePfad "TS3Client") (Join-Path $env:APPDATA "TS3Client")
     Backup-FolderTo (Join-Path $profilePfad "XnViewMP") (Join-Path $env:APPDATA "XnViewMP")
-    Backup-FolderTo (Join-Path $profilePfad "SyncToy") (Join-Path $env:LOCALAPPDATA "Microsoft\SyncToy\2.0")
     Backup-FolderTo (Join-Path $profilePfad ".vscode") (Join-Path $env:USERPROFILE ".vscode")
     Copy-Item D:\Sonstiges\Profile\WinSCP.ini $env:APPDATA -Force
 }
@@ -58,13 +65,13 @@ function Backup-Full() {
         Backup-FolderTo "D:\Lesestoff" (Join-Path $BackupPfad "Lesestoff") $BackupPfad
         Backup-FolderTo "D:\Spiele" (Join-Path $BackupPfad "Spiele") $BackupPfad
     }
-    
+
     $BackupPfad = "A:\"
     if (Test-Path $BackupPfad) {
         Backup-FolderTo "D:\Sonstiges\Software" (Join-Path $BackupPfad "Software")
         Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme")
     }
-    
+
     $BackupPfad = "\\Schatzkiste\Backup"
     if (Test-Path $BackupPfad) {
         Backup-FolderTo "D:\Desktop" (Join-Path $BackupPfad "Desktop") $BackupPfad
@@ -74,14 +81,18 @@ function Backup-Full() {
         Backup-FolderTo "D:\Sonstiges" (Join-Path $BackupPfad "Sonstiges") $BackupPfad
         Backup-FolderTo "D:\Spiele" (Join-Path $BackupPfad "Spiele") $BackupPfad
     }
-    
+
     $BackupPfad = "\\Schatzkiste\Multimedia"
     if (Test-Path $BackupPfad) {
         Backup-FolderTo "D:\Bilder" (Join-Path $BackupPfad "Bilder")
         Backup-FolderTo "D:\Lesestoff" (Join-Path $BackupPfad "Lesestoff")
         Backup-FolderTo "D:\Musik" (Join-Path $BackupPfad "Musik")
-        # Offen: Videos
-        robocopy.exe "D:\Videos" (Join-Path $BackupPfad "Videos") /NP /TEE /XJ /NDL /R:5 /W:10 /NJH /NJS
+        Copy-FolderTo "D:\Videos" (Join-Path $BackupPfad "Videos")
+    }
+
+    $BackupPfad = "\\Schatzkiste\Download"
+    if (Test-Path $BackupPfad) {
+        Copy-FolderTo "D:\Downloads" $BackupPfad
     }
 }
 
