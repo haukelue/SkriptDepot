@@ -22,7 +22,7 @@
         $options += "/XF", $exclude
     }
 
-    robocopy.exe  "${source}" "${destination}" /MIR /NP /TEE /XJ /NDL /R:5 /W:10 @options
+    robocopy.exe "${source}" "${destination}" /MIR /NP /TEE /XJ /NDL /R:5 /W:10 @options
 }
 
 function Backup-Programmconfigurations() {
@@ -44,8 +44,8 @@ function Restore-Programmconfigurations() {
 }
 
 function Backup-Full() {
-    if (Test-Path "B:\") {
-        $BackupPfad = "B:\Backup"
+    $BackupPfad = "B:\Backup"
+    if (Test-Path $BackupPfad) {
         Backup-FolderTo "D:\Sonstiges" (Join-Path $BackupPfad "Sonstiges") $BackupPfad
         Backup-FolderTo "D:\OneDrive" (Join-Path $BackupPfad "OneDrive") $BackupPfad ".849C9593-D756-4E56-8D6E-42412F2A707B"
         Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme") $BackupPfad
@@ -58,9 +58,30 @@ function Backup-Full() {
         Backup-FolderTo "D:\Lesestoff" (Join-Path $BackupPfad "Lesestoff") $BackupPfad
         Backup-FolderTo "D:\Spiele" (Join-Path $BackupPfad "Spiele") $BackupPfad
     }
-    else {
-        Write-Warning "Die externe Platte ist nicht angeschlossen. Abbruch!"
-        return
+    
+    $BackupPfad = "A:\"
+    if (Test-Path $BackupPfad) {
+        Backup-FolderTo "D:\Sonstiges\Software" (Join-Path $BackupPfad "Software")
+        Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme")
+    }
+    
+    $BackupPfad = "\\Schatzkiste\Backup"
+    if (Test-Path $BackupPfad) {
+        Backup-FolderTo "D:\Desktop" (Join-Path $BackupPfad "Desktop") $BackupPfad
+        Backup-FolderTo "D:\Dokumente" (Join-Path $BackupPfad "Dokumente") $BackupPfad
+        Backup-FolderTo "D:\Gespeicherte Spiele" (Join-Path $BackupPfad "Gespeicherte Spiele") $BackupPfad
+        Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme") $BackupPfad
+        Backup-FolderTo "D:\Sonstiges" (Join-Path $BackupPfad "Sonstiges") $BackupPfad
+        Backup-FolderTo "D:\Spiele" (Join-Path $BackupPfad "Spiele") $BackupPfad
+    }
+    
+    $BackupPfad = "\\Schatzkiste\Multimedia"
+    if (Test-Path $BackupPfad) {
+        Backup-FolderTo "D:\Bilder" (Join-Path $BackupPfad "Bilder")
+        Backup-FolderTo "D:\Lesestoff" (Join-Path $BackupPfad "Lesestoff")
+        Backup-FolderTo "D:\Musik" (Join-Path $BackupPfad "Musik")
+        # Offen: Videos
+        robocopy.exe "D:\Videos" (Join-Path $BackupPfad "Videos") /NP /TEE /XJ /NDL /R:5 /W:10 /NJH /NJS
     }
 }
 
