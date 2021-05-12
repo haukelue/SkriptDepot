@@ -14,9 +14,6 @@
         $logfile = Join-Path $logpath "Backup-${datum}.log"
         $options += '/UNILOG+:"' + ${logfile} + '"'
     }
-    else {
-        $options += "/NJH", "/NJS"
-    }
 
     if ($exclude.Length -gt 0) {
         $options += "/XF", $exclude
@@ -31,7 +28,7 @@ function Copy-FolderTo {
         [string]$destination
     )
     
-    robocopy.exe "${source}" "${destination}" /NP /TEE /XJ /NDL /R:5 /W:10 /NJH /NJS
+    robocopy.exe "${source}" "${destination}" /NP /XJ /NDL /R:5 /W:10 /E
 }
 
 function Backup-Programmconfigurations() {
@@ -92,7 +89,7 @@ function Backup-Full() {
 
     $BackupPfad = "\\Schatzkiste\Download"
     if (Test-Path $BackupPfad) {
-        Copy-FolderTo "D:\Downloads" $BackupPfad
+        Backup-FolderTo "D:\Downloads" $BackupPfad
     }
 }
 
@@ -135,7 +132,7 @@ $host.ui.RawUI.WindowTitle = "Backupsteuerung & Systeminformationen"
 Write-Output ""
 Write-Output "1 - Programmeneinstellungen sichern"
 Write-Output "2 - Programmeneinstellungen wiederherstellen"
-Write-Output "3 - Volle Sicherung auf Backupplatte B:"
+Write-Output "3 - Volle Sicherung"
 Write-Output ""
 Write-Output "4 - Speicherauslastung"
 Write-Output "5 - Festplattenauslastung"
