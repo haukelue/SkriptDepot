@@ -1,10 +1,11 @@
 ﻿function Backup-FolderTo() {
     param
     (
-        [string]$source,
-        [string]$destination,
-        [string]$logpath = "",
-        [string]$exclude = ""
+        [Parameter(Mandatory=$true)][string]$source,
+        [Parameter(Mandatory=$true)][string]$destination,
+        [Parameter(Mandatory=$false)][string]$logpath = "",
+        [Parameter(Mandatory=$false)][string]$excludeDirectories = "",
+        [Parameter(Mandatory=$false)][string]$excludeFiles = ""
     )
 
     $options = @()
@@ -15,8 +16,12 @@
         $options += '/UNILOG+:"' + ${logfile} + '"'
     }
 
-    if ($exclude.Length -gt 0) {
-        $options += "/XF", $exclude
+    if ($excludeDirectories.Length -gt 0) {
+        $options += "/XD", $excludeDirectories
+    }
+
+    if ($excludeFiles.Length -gt 0) {
+        $options += "/XF", $excludeFiles
     }
 
     robocopy.exe "${source}" "${destination}" /MIR /NP /TEE /XJ /NDL /R:5 /W:10 @options
@@ -24,8 +29,8 @@
 
 function Copy-FolderTo {
     param (
-        [string]$source,
-        [string]$destination
+        [Parameter(Mandatory=$true)][string]$source,
+        [Parameter(Mandatory=$true)][string]$destination
     )
     
     robocopy.exe "${source}" "${destination}" /NP /XJ /NDL /R:5 /W:10 /E
@@ -51,7 +56,7 @@ function Backup-Full() {
     $BackupPfad = "B:\Backup"
     if (Test-Path $BackupPfad) {
         Backup-FolderTo "D:\Sonstiges" (Join-Path $BackupPfad "Sonstiges") $BackupPfad
-        Backup-FolderTo "D:\OneDrive" (Join-Path $BackupPfad "OneDrive") $BackupPfad ".849C9593-D756-4E56-8D6E-42412F2A707B"
+        Backup-FolderTo "D:\OneDrive" (Join-Path $BackupPfad "OneDrive") $BackupPfad -excludeFiles ".849C9593-D756-4E56-8D6E-42412F2A707B"
         Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme") $BackupPfad
         Backup-FolderTo "D:\Gespeicherte Spiele" (Join-Path $BackupPfad "Gespeicherte Spiele") $BackupPfad
         Backup-FolderTo "D:\Downloads" (Join-Path $BackupPfad "Downloads") $BackupPfad
@@ -82,7 +87,7 @@ function Backup-Full() {
     $BackupPfad = "\\Schatzkiste\Multimedia"
     if (Test-Path $BackupPfad) {
         Backup-FolderTo "D:\Bilder" (Join-Path $BackupPfad "Bilder")
-        Backup-FolderTo "D:\Lesestoff" (Join-Path $BackupPfad "Lesestoff")
+        Backup-FolderTo "D:\Lesestoff" (Join-Path $BackupPfad "Lesestoff") -excludeDirectories "\\Schatzkiste\Multimedia\Lesestoff\Comics\XXX\tentaclerape.net"
         Backup-FolderTo "D:\Musik" (Join-Path $BackupPfad "Musik")
         Copy-FolderTo "D:\Videos" (Join-Path $BackupPfad "Videos")
     }
