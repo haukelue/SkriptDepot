@@ -33,7 +33,7 @@ function Copy-FolderTo {
         [Parameter(Mandatory=$true)][string]$destination
     )
     
-    robocopy.exe "${source}" "${destination}" /NP /XJ /NDL /R:5 /W:10 /E
+    robocopy.exe "${source}" "${destination}" /NP /XJ /NDL /R:5 /W:10 /E /XX
 }
 
 function Backup-Programmconfigurations() {
@@ -94,7 +94,7 @@ function Backup-Full() {
 
     $BackupPfad = "\\Schatzkiste\Download"
     if (Test-Path $BackupPfad) {
-        Backup-FolderTo "D:\Downloads" $BackupPfad
+        Copy-FolderTo "D:\Downloads" $BackupPfad
     }
 }
 
