@@ -1,4 +1,4 @@
-﻿function Backup-FolderTo() {
+﻿function Backup-FolderTo {
     param
     (
         [Parameter(Mandatory=$true)][string]$source,
@@ -36,7 +36,7 @@ function Copy-FolderTo {
     robocopy.exe "${source}" "${destination}" /NP /XJ /NDL /R:5 /W:10 /E /XX
 }
 
-function Backup-Programmconfigurations() {
+function Backup-Programmconfigurations {
     $profilePfad = "D:\Sonstiges\Profile"
     Backup-FolderTo (Join-Path $env:APPDATA "TS3Client") (Join-Path $profilePfad "TS3Client")
     Backup-FolderTo (Join-Path $env:APPDATA "XnViewMP") (Join-Path $profilePfad "XnViewMP")
@@ -44,7 +44,7 @@ function Backup-Programmconfigurations() {
     Copy-Item (Join-Path $env:APPDATA WinSCP.ini) D:\Sonstiges\Profile\ -Force
 }
 
-function Restore-Programmconfigurations() {
+function Restore-Programmconfigurations {
     $profilePfad = "D:\Sonstiges\Profile"
     Backup-FolderTo (Join-Path $profilePfad "TS3Client") (Join-Path $env:APPDATA "TS3Client")
     Backup-FolderTo (Join-Path $profilePfad "XnViewMP") (Join-Path $env:APPDATA "XnViewMP")
@@ -52,7 +52,21 @@ function Restore-Programmconfigurations() {
     Copy-Item D:\Sonstiges\Profile\WinSCP.ini $env:APPDATA -Force
 }
 
-function Backup-Full() {
+function Backup-Full {
+    Backup-ToStick
+    Backup-ToDisk
+    Backup-ToNAS
+}
+
+function Backup-ToStick {
+    $BackupPfad = "A:\"
+    if (Test-Path $BackupPfad) {
+        Backup-FolderTo "D:\Sonstiges\Software" (Join-Path $BackupPfad "Software")
+        Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme")
+    }
+}
+
+function Backup-ToDisk {
     $BackupPfad = "B:\Backup"
     if (Test-Path $BackupPfad) {
         Backup-FolderTo "D:\Sonstiges" (Join-Path $BackupPfad "Sonstiges") $BackupPfad
@@ -67,13 +81,9 @@ function Backup-Full() {
         Backup-FolderTo "D:\Lesestoff" (Join-Path $BackupPfad "Lesestoff") $BackupPfad
         Backup-FolderTo "D:\Spiele" (Join-Path $BackupPfad "Spiele") $BackupPfad
     }
+}
 
-    $BackupPfad = "A:\"
-    if (Test-Path $BackupPfad) {
-        Backup-FolderTo "D:\Sonstiges\Software" (Join-Path $BackupPfad "Software")
-        Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme")
-    }
-
+function Backup-ToNAS {
     $BackupPfad = "\\Schatzkiste\Backup"
     if (Test-Path $BackupPfad) {
         Backup-FolderTo "D:\Desktop" (Join-Path $BackupPfad "Desktop") $BackupPfad
@@ -98,19 +108,19 @@ function Backup-Full() {
     }
 }
 
-function Get-MemoryValues() {
+function Get-MemoryValues {
     $memoryInfo = Get-CimInstance CIM_OperatingSystem
 
     Write-Output $memoryInfo | Format-Table @{Name = "Name"; Expression = { $PSItem.CSName } }, @{Name = "Total Memory"; Expression = { "{0,6:N2} GB" -f ($PSItem.TotalVisibleMemorySize / 1MB) }; align = "right" }, @{Name = " Free Memory"; Expression = { "{0,6:N2} GB" -f ($PSItem.FreePhysicalMemory / 1MB) }; align = "right" } -AutoSize
 }
 
-function Get-DiskSpaceInfo() {
+function Get-DiskSpaceInfo {
     $diskInfo = Get-CimInstance CIM_LogicalDisk | Where-Object DriveType -eq 3 | Sort-Object DeviceID
 
     Write-Output $diskInfo | Format-Table @{Label = "Laufwerk"; Expression = { $_.DeviceID } }, @{Label = "Total (GB)"; Expression = { "{0,6:N2}" -f ($PSItem.Size / 1GB) }; align = "right" }, @{Label = "Frei (GB)"; Expression = { "{0,6:N2}" -f ($PSItem.FreeSpace / 1GB) }; align = "right" }, @{Label = "Frei (%)"; Expression = { "{0,3:P0}" -f ($PSItem.FreeSpace / $PSItem.Size) }; align = "right" } -AutoSize
 }
 
-function Reset-Dns() {
+function Reset-Dns {
     if (Test-IsAdmin) {
         ##Requires -RunAsAdministrator
         ipconfig /flushdns
@@ -137,11 +147,14 @@ $host.ui.RawUI.WindowTitle = "Backupsteuerung & Systeminformationen"
 Write-Output ""
 Write-Output "1 - Programmeneinstellungen sichern"
 Write-Output "2 - Programmeneinstellungen wiederherstellen"
-Write-Output "3 - Volle Sicherung"
+Write-Output "3 - Sicherung: Vollständig"
+Write-Output "4 - Sicherung: A:\"
+Write-Output "5 - Sicherung: B:\"
+Write-Output "6 - Sicherung: NAS"
 Write-Output ""
-Write-Output "4 - Speicherauslastung"
-Write-Output "5 - Festplattenauslastung"
-Write-Output "6 - Reset DNS"
+Write-Output "7 - Speicherauslastung"
+Write-Output "8 - Festplattenauslastung"
+Write-Output "9 - Reset DNS"
 Write-Output ""
 $auswahl = Read-Host "Auswahl"
 
@@ -149,9 +162,12 @@ switch ($Auswahl) {
     1 { Backup-Programmconfigurations }
     2 { Restore-Programmconfigurations }
     3 { Backup-Full }
-    4 { Get-MemoryValues }
-    5 { Get-DiskSpaceInfo }
-    6 { Reset-Dns }
+    4 { Backup-ToStick }
+    5 { Backup-ToDisk }
+    6 { Backup-ToNAS }
+    7 { Get-MemoryValues }
+    8 { Get-DiskSpaceInfo }
+    9 { Reset-Dns }
 }
 
 Write-Output "... any-key Taste ..."
