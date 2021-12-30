@@ -61,7 +61,7 @@ function Backup-Full {
 function Backup-ToStick {
     $BackupPfad = "A:\"
     if (Test-Path $BackupPfad) {
-        Backup-FolderTo "D:\Sonstiges\Software" (Join-Path $BackupPfad "Software")
+        Backup-FolderTo "D:\Software" (Join-Path $BackupPfad "Software")
         Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme")
     }
 }
@@ -70,6 +70,7 @@ function Backup-ToDisk {
     $BackupPfad = "B:\Backup"
     if (Test-Path $BackupPfad) {
         Backup-FolderTo "D:\Sonstiges" (Join-Path $BackupPfad "Sonstiges") $BackupPfad
+        Backup-FolderTo "D:\Software" (Join-Path $BackupPfad "Software") $BackupPfad
         Backup-FolderTo "D:\OneDrive" (Join-Path $BackupPfad "OneDrive") $BackupPfad -excludeFiles ".849C9593-D756-4E56-8D6E-42412F2A707B"
         Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme") $BackupPfad
         Backup-FolderTo "D:\Gespeicherte Spiele" (Join-Path $BackupPfad "Gespeicherte Spiele") $BackupPfad
@@ -84,6 +85,11 @@ function Backup-ToDisk {
 }
 
 function Backup-ToNAS {
+    $BackupPfad = "\\Schatzkiste\Public"
+    if (Test-Path $BackupPfad) {
+        Copy-FolderTo "D:\Software" (Join-Path $BackupPfad "Software")
+    }
+
     $BackupPfad = "\\Schatzkiste\Backup"
     if (Test-Path $BackupPfad) {
         Backup-FolderTo "D:\Desktop" (Join-Path $BackupPfad "Desktop") $BackupPfad
