@@ -114,6 +114,13 @@ function Backup-ToNAS {
     }
 }
 
+function Backup-MarieFromNAS {
+    $BackupPfad = "B:\Marie"
+    if (Test-Path $BackupPfad) {
+        Backup-FolderTo "\\Schatzkiste\Public\Marie" $BackupPfad
+    }
+}
+
 function Get-MemoryValues {
     $memoryInfo = Get-CimInstance CIM_OperatingSystem
 
@@ -157,14 +164,15 @@ Write-Output "3 - Sicherung: Vollständig"
 Write-Output "4 - Sicherung: A:\"
 Write-Output "5 - Sicherung: B:\"
 Write-Output "6 - Sicherung: NAS"
+Write-Output "m - Sicherung Marie: NAS auf B:\"
 Write-Output ""
 Write-Output "7 - Speicherauslastung"
 Write-Output "8 - Festplattenauslastung"
 Write-Output "9 - Reset DNS"
 Write-Output ""
-$auswahl = Read-Host "Auswahl"
+$Auswahl = Read-Host "Auswahl"
 
-switch ($Auswahl) {
+switch ($Auswahl.ToLowerInvariant()) {
     1 { Backup-Programmconfigurations }
     2 { Restore-Programmconfigurations }
     3 { Backup-Full }
@@ -174,6 +182,7 @@ switch ($Auswahl) {
     7 { Get-MemoryValues }
     8 { Get-DiskSpaceInfo }
     9 { Reset-Dns }
+    m { Backup-MarieFromNAS }
 }
 
 Write-Output "... any-key Taste ..."
