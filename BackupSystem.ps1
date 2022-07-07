@@ -103,7 +103,7 @@ function Backup-ToNAS {
     $BackupPfad = "\\Schatzkiste\Multimedia"
     if (Test-Path $BackupPfad) {
         Backup-FolderTo "D:\Bilder" (Join-Path $BackupPfad "Bilder")
-        Backup-FolderTo "D:\Lesestoff" (Join-Path $BackupPfad "Lesestoff") -excludeDirectories "\\Schatzkiste\Multimedia\Lesestoff\Comics\XXX\tentaclerape.net"
+        Backup-FolderTo "D:\Lesestoff" (Join-Path $BackupPfad "Lesestoff")
         Backup-FolderTo "D:\Musik" (Join-Path $BackupPfad "Musik")
         Copy-FolderTo "D:\Videos" (Join-Path $BackupPfad "Videos")
     }
