@@ -119,6 +119,10 @@ function Backup-MarieFromNAS {
     if (Test-Path $BackupPfad) {
         Backup-FolderTo "\\Schatzkiste\Public\Marie" $BackupPfad
     }
+    $BackupPfad = "M:\Marie"
+    if (Test-Path $BackupPfad) {
+        Backup-FolderTo "\\Schatzkiste\Public\Marie" $BackupPfad
+    }
 }
 
 function Get-MemoryValues {
@@ -164,7 +168,7 @@ Write-Output "3 - Sicherung: Vollständig"
 Write-Output "4 - Sicherung: A:\"
 Write-Output "5 - Sicherung: B:\"
 Write-Output "6 - Sicherung: NAS"
-Write-Output "m - Sicherung Marie: NAS auf B:\"
+Write-Output "m - Sicherung Marie: NAS auf B:\ und M:\"
 Write-Output ""
 Write-Output "7 - Speicherauslastung"
 Write-Output "8 - Festplattenauslastung"
