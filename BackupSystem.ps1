@@ -85,7 +85,7 @@ function Backup-ToDisk {
 function Backup-ToNAS {
     $BackupPfad = "\\Schatzkiste\Public"
     if (Test-Path $BackupPfad) {
-        Copy-FolderTo "D:\Software" (Join-Path $BackupPfad "Software")
+        Backup-FolderTo "D:\Software" (Join-Path $BackupPfad "Software")
     }
 
     $BackupPfad = "\\Schatzkiste\Backup"
