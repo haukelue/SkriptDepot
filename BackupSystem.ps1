@@ -113,13 +113,16 @@ function Backup-ToNAS {
 }
 
 function Backup-MarieFromNAS {
-    $BackupPfad = "B:\Marie"
-    if (Test-Path $BackupPfad) {
-        Backup-FolderTo "\\Schatzkiste\Public\Marie" $BackupPfad
+    $BackupPfadB = "B:\Marie"
+    $BackupPfadM = "M:\Marie"
+    if (Test-Path $BackupPfadB) {
+        Backup-FolderTo "\\Schatzkiste\Public\Marie" $BackupPfadB
     }
-    $BackupPfad = "M:\Marie"
-    if (Test-Path $BackupPfad) {
-        Backup-FolderTo "\\Schatzkiste\Public\Marie" $BackupPfad
+    if ((Test-Path $BackupPfadB) -and (Test-Path $BackupPfadM)) {
+        Backup-FolderTo $BackupPfadB $BackupPfadM
+    }
+    elseif (Test-Path $BackupPfadM) {
+        Backup-FolderTo "\\Schatzkiste\Public\Marie" $BackupPfadM
     }
 }
 
