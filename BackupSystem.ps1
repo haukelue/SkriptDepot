@@ -13,7 +13,7 @@
     if ($logpath.Length -gt 0) {
         $datum = Get-Date -Format "yyyy-MM-dd"
         $logfile = Join-Path $logpath "Backup-${datum}.log"
-        $options += '/UNILOG+:"' + ${logfile} + '"'
+        $options += "/UNILOG+:${logfile}"
     }
 
     if ($excludeDirectories.Length -gt 0) {
