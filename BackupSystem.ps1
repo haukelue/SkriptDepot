@@ -88,7 +88,7 @@ function Backup-ToNAS {
         Backup-FolderTo "D:\Software" (Join-Path $BackupPfad "Software")
     }
 
-    $BackupPfad = "\\Schatzkiste\Backup"
+    $BackupPfad = "\\Schatzkiste\home"
     if (Test-Path $BackupPfad) {
         Backup-FolderTo "D:\Desktop" (Join-Path $BackupPfad "Desktop") $BackupPfad
         Backup-FolderTo "D:\Dokumente" (Join-Path $BackupPfad "Dokumente") $BackupPfad
@@ -96,6 +96,7 @@ function Backup-ToNAS {
         Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme") $BackupPfad
         Backup-FolderTo "D:\Sonstiges" (Join-Path $BackupPfad "Sonstiges") $BackupPfad
         Backup-FolderTo "D:\Spiele" (Join-Path $BackupPfad "Spiele") $BackupPfad
+        Backup-FolderTo "D:\Downloads" (Join-Path $BackupPfad "Downloads") $BackupPfad
     }
 
     $BackupPfad = "\\Schatzkiste\Multimedia"
@@ -104,11 +105,6 @@ function Backup-ToNAS {
         Backup-FolderTo "D:\Lesestoff" (Join-Path $BackupPfad "Lesestoff")
         Backup-FolderTo "D:\Musik" (Join-Path $BackupPfad "Musik")
         Copy-FolderTo "D:\Videos" (Join-Path $BackupPfad "Videos")
-    }
-
-    $BackupPfad = "\\Schatzkiste\Download"
-    if (Test-Path $BackupPfad) {
-        Copy-FolderTo "D:\Downloads" $BackupPfad
     }
 }
 
