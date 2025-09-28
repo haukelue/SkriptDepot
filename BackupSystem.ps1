@@ -122,18 +122,6 @@ function Backup-MarieFromNAS {
     }
 }
 
-function Get-MemoryValues {
-    $memoryInfo = Get-CimInstance CIM_OperatingSystem
-
-    Write-Output $memoryInfo | Format-Table @{Name = "Name"; Expression = { $PSItem.CSName } }, @{Name = "Total Memory"; Expression = { "{0,6:N2} GB" -f ($PSItem.TotalVisibleMemorySize / 1MB) }; align = "right" }, @{Name = " Free Memory"; Expression = { "{0,6:N2} GB" -f ($PSItem.FreePhysicalMemory / 1MB) }; align = "right" } -AutoSize
-}
-
-function Get-DiskSpaceInfo {
-    $diskInfo = Get-CimInstance CIM_LogicalDisk | Where-Object DriveType -eq 3 | Sort-Object DeviceID
-
-    Write-Output $diskInfo | Format-Table @{Label = "Laufwerk"; Expression = { $_.DeviceID } }, @{Label = "Total (GB)"; Expression = { "{0,6:N2}" -f ($PSItem.Size / 1GB) }; align = "right" }, @{Label = "Frei (GB)"; Expression = { "{0,6:N2}" -f ($PSItem.FreeSpace / 1GB) }; align = "right" }, @{Label = "Frei (%)"; Expression = { "{0,3:P0}" -f ($PSItem.FreeSpace / $PSItem.Size) }; align = "right" } -AutoSize
-}
-
 function Reset-Dns {
     if (Test-IsAdmin) {
         ##Requires -RunAsAdministrator
@@ -165,10 +153,8 @@ Write-Output "3 - Sicherung: A:\, B:\ und NAS"
 Write-Output "4 - Sicherung: A:\"
 Write-Output "5 - Sicherung: B:\"
 Write-Output "6 - Sicherung: NAS"
-Write-Output "m - Sicherung Marie: NAS auf B:\ und M:\"
-Write-Output ""
-Write-Output "7 - Speicherauslastung"
-Write-Output "8 - Festplattenauslastung"
+Write-Output "7 - Sicherung Marie: NAS auf B:\ und M:\"
+Write-Output "8 - "
 Write-Output "9 - Reset DNS"
 Write-Output ""
 $Auswahl = Read-Host "Auswahl"
@@ -180,10 +166,8 @@ switch ($Auswahl.ToLowerInvariant()) {
     4 { Backup-ToStick }
     5 { Backup-ToDisk }
     6 { Backup-ToNAS }
-    7 { Get-MemoryValues }
-    8 { Get-DiskSpaceInfo }
+    7 { Backup-MarieFromNAS }
     9 { Reset-Dns }
-    m { Backup-MarieFromNAS }
 }
 
 Write-Output "... any-key Taste ..."
