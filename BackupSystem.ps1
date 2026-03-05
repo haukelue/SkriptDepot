@@ -83,42 +83,27 @@ function Backup-ToDisk {
 }
 
 function Backup-ToNAS {
-    $BackupPfad = "\\Schatzkiste\Public"
-    if (Test-Path $BackupPfad) {
-        Backup-FolderTo "D:\Software" (Join-Path $BackupPfad "Software")
-    }
-
-    $BackupPfad = "\\Schatzkiste\home"
-    if (Test-Path $BackupPfad) {
-        Backup-FolderTo "D:\Desktop" (Join-Path $BackupPfad "Desktop") $BackupPfad
-        Backup-FolderTo "D:\Dokumente" (Join-Path $BackupPfad "Dokumente") $BackupPfad
-        Backup-FolderTo "D:\Gespeicherte Spiele" (Join-Path $BackupPfad "Gespeicherte Spiele") $BackupPfad
-        Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme") $BackupPfad
-        Backup-FolderTo "D:\Sonstiges" (Join-Path $BackupPfad "Sonstiges") $BackupPfad
-        Backup-FolderTo "D:\Spiele" (Join-Path $BackupPfad "Spiele") $BackupPfad
-        Backup-FolderTo "D:\Downloads" (Join-Path $BackupPfad "Downloads") $BackupPfad
-    }
-
-    $BackupPfad = "\\Schatzkiste\Multimedia"
-    if (Test-Path $BackupPfad) {
-        Backup-FolderTo "D:\Bilder" (Join-Path $BackupPfad "Bilder")
-        Backup-FolderTo "D:\Lesestoff" (Join-Path $BackupPfad "Lesestoff")
-        Backup-FolderTo "D:\Musik" (Join-Path $BackupPfad "Musik")
-        Copy-FolderTo "D:\Videos" (Join-Path $BackupPfad "Videos")
+    if (Test-Path "\\Schatzkammer\Software") {
+        Backup-FolderTo "D:\Software" "\\Schatzkammer\Software" -excludeDirectories "#recycle"
+        Copy-FolderTo "D:\Lesestoff" "\\Schatzkammer\Lesestoff"
+        Copy-FolderTo "D:\Musik" "\\Schatzkammer\Musik"
+        Copy-FolderTo "D:\Videos" "\\Schatzkammer\Videos"
     }
 }
 
 function Backup-MarieFromNAS {
-    $BackupPfadB = "B:\Marie"
-    $BackupPfadM = "M:\Marie"
-    if (Test-Path $BackupPfadB) {
-        Backup-FolderTo "\\Schatzkiste\Public\Marie" $BackupPfadB
-    }
-    if ((Test-Path $BackupPfadB) -and (Test-Path $BackupPfadM)) {
-        Backup-FolderTo $BackupPfadB $BackupPfadM
-    }
-    elseif (Test-Path $BackupPfadM) {
-        Backup-FolderTo "\\Schatzkiste\Public\Marie" $BackupPfadM
+    if (Test-Path "\\Schatzkammer\Marie") {
+        $BackupPfadB = "B:\Marie"
+        $BackupPfadM = "M:\Marie"
+        if (Test-Path $BackupPfadB) {
+            Backup-FolderTo "\\Schatzkammer\Marie" $BackupPfadB
+        }
+        if ((Test-Path $BackupPfadB) -and (Test-Path $BackupPfadM)) {
+            Backup-FolderTo $BackupPfadB $BackupPfadM
+        }
+        elseif (Test-Path $BackupPfadM) {
+            Backup-FolderTo "\\Schatzkammer\Marie" $BackupPfadM
+        }
     }
 }
 
