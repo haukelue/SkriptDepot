@@ -96,13 +96,13 @@ function Backup-MarieFromNAS {
         $BackupPfadB = "B:\Marie"
         $BackupPfadM = "M:\Marie"
         if (Test-Path $BackupPfadB) {
-            Backup-FolderTo "\\Schatzkammer\Marie" $BackupPfadB
+            Backup-FolderTo "\\Schatzkammer\Marie" $BackupPfadB -excludeDirectories "#recycle"
         }
         if ((Test-Path $BackupPfadB) -and (Test-Path $BackupPfadM)) {
             Backup-FolderTo $BackupPfadB $BackupPfadM
         }
         elseif (Test-Path $BackupPfadM) {
-            Backup-FolderTo "\\Schatzkammer\Marie" $BackupPfadM
+            Backup-FolderTo "\\Schatzkammer\Marie" $BackupPfadM -excludeDirectories "#recycle"
         }
     }
 }
