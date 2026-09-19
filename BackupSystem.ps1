@@ -67,7 +67,7 @@ function Backup-ToStick {
 function Backup-ToDisk {
     $BackupPfad = "B:\Backup"
     if (Test-Path $BackupPfad) {
-        Backup-FolderTo "D:\Sonstiges" (Join-Path $BackupPfad "Sonstiges") $BackupPfad
+        Backup-FolderTo "D:\Sonstiges" (Join-Path $BackupPfad "Sonstiges") $BackupPfad -excludeFiles "D:\Sonstiges\Profile\*\parent.lock"
         Backup-FolderTo "D:\Software" (Join-Path $BackupPfad "Software") $BackupPfad
         Backup-FolderTo "D:\OneDrive" (Join-Path $BackupPfad "OneDrive") $BackupPfad -excludeFiles ".849C9593-D756-4E56-8D6E-42412F2A707B"
         Backup-FolderTo "D:\Programme" (Join-Path $BackupPfad "Programme") $BackupPfad
